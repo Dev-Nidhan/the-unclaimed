@@ -50,7 +50,6 @@ services:
     plan: 2c-8g
     dockerfilePath: ./ollama/Dockerfile
     dockerContext: ./ollama
-    maxShutdownDelaySeconds: 120
     disk:
       name: the-unclaimed-model-cache
       mountPath: /var/data
