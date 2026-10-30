@@ -2,6 +2,20 @@
 
 THE UNCLAIMED is a local digital-archaeology workspace. It keeps an investigation’s sources, page observations, archive captures, and model findings in PostgreSQL, then draws only those stored rows as an evidence graph and a historical timeline. A separate Residual Presence layer can play in-app visual events and local audio while an investigation is open. Search snippets and the sample layout are leads or labeled placeholders. They are not findings.
 
+## Screenshots and demo
+
+The short walkthrough moves from the archive landing page to the case intake screen. It uses real interface captures and does not create an investigation.
+
+![THE UNCLAIMED archive-to-intake walkthrough](docs/media/the-unclaimed-demo.gif)
+
+| Archive landing page | Case intake |
+| --- | --- |
+| ![Archive landing page](docs/media/archive-home.png) | ![New case intake](docs/media/case-intake.png) |
+
+## Deployment
+
+The Render Blueprint runs the Next.js application and a private Ollama service with Gemma 3 4B. See [DEPLOYMENT.md](DEPLOYMENT.md) for configuration, cost estimates, and the deployment checklist.
+
 ## Architecture
 
 The Next.js app is the only interface. Server code talks to Tiger Data through Drizzle, to SerpApi for discovery, to Browserbase for a cloud browser, to the Internet Archive for Wayback captures, and to a loopback Ollama process for Gemma. Findings are written only after a Zod check, and a verified claim has to quote text that is already stored.
