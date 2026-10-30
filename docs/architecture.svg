@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+  <title id="title">THE UNCLAIMED production system architecture</title>
+  <desc id="desc">A deployment architecture showing a user's browser connecting to the Next.js app on Render, which connects over TLS to Tiger Data, SerpApi, Browserbase, the Internet Archive, DigitalOcean Spaces, Sentry, and a separate private Render service running Gemma 3 4B through an authenticated gateway. Static audio is served to the browser. A local-only demo lane shows loopback Ollama and local artifact storage.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#60717d"/></marker>
+    <marker id="arrowTeal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#168c88"/></marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#7660b5"/></marker>
+    <style>
+      text{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#e8edf0} .title{font-size:30px;font-weight:700;letter-spacing:2px}.subtitle{font-size:15px;fill:#a8b6bf}.zone-title{font-size:14px;font-weight:700;letter-spacing:1.4px;fill:#a8b6bf}.node-title{font-size:16px;font-weight:650}.node-sub{font-size:12px;fill:#a8b6bf}.label{font-size:11px;fill:#afbdc5}.tiny{font-size:10px;fill:#9baab3}.pill{font-size:10px;font-weight:700;letter-spacing:.8px}.card{fill:#151e24;stroke:#33434d;stroke-width:1.4}.inner{fill:#1b272e;stroke:#40535e;stroke-width:1.2}.external{fill:#121b20;stroke:#3b4c55;stroke-width:1.2}.line{fill:none;stroke:#60717d;stroke-width:1.7;marker-end:url(#arrow)}.teal{fill:none;stroke:#168c88;stroke-width:1.9;marker-end:url(#arrowTeal)}.purple{fill:none;stroke:#7660b5;stroke-width:1.8;marker-end:url(#arrowPurple)}.dashed{stroke-dasharray:7 6}.divider{stroke:#26343c;stroke-width:1}
+    </style>
+  </defs>
+  <rect width="1600" height="1080" fill="#0c1216"/>
+  <path d="M0 180H1600M0 886H1600" class="divider"/>
+  <text x="52" y="62" class="title">THE UNCLAIMED</text>
+  <text x="53" y="91" class="subtitle">Production deployment · Render · Evidence-first digital archaeology</text>
+  <rect x="1340" y="43" width="205" height="30" rx="15" fill="#173a37" stroke="#286e68"/>
+  <text x="1442" y="62" text-anchor="middle" class="pill" fill="#8bd6c8">PRIVATE INFERENCE</text>
+
+  <!-- User / browser -->
+  <rect x="42" y="136" width="1516" height="120" rx="16" fill="#10181d" stroke="#263740"/>
+  <text x="63" y="163" class="zone-title">CLIENT DEVICE</text>
+  <rect x="81" y="178" width="370" height="58" rx="11" class="inner"/>
+  <circle cx="112" cy="207" r="16" fill="#2f7771"/><path d="M104 207h16m-8-8v16" stroke="#d9f2ed" stroke-width="2"/>
+  <text x="141" y="202" class="node-title">Investigator's browser</text>
+  <text x="141" y="222" class="node-sub">Immersive workspace · case controls · evidence graph</text>
+  <rect x="496" y="188" width="198" height="38" rx="19" fill="#1b272e" stroke="#40535e"/>
+  <text x="595" y="212" text-anchor="middle" class="label">Static ambience · /public/audio</text>
+  <path d="M451 207H494" class="line"/>
+  <text x="470" y="193" text-anchor="middle" class="tiny">HTTPS</text>
+  <rect x="1030" y="188" width="435" height="38" rx="19" fill="#1b272e" stroke="#40535e"/>
+  <text x="1247" y="212" text-anchor="middle" class="label">Browserbase live view · embedded only during a field session</text>
+
+  <!-- Render application boundary -->
+  <rect x="42" y="285" width="760" height="568" rx="18" fill="#10191e" stroke="#2e7772" stroke-width="1.6" stroke-dasharray="9 6"/>
+  <text x="66" y="316" class="zone-title" fill="#72c7b7">RENDER · PRIVATE NETWORK</text>
+  <rect x="82" y="350" width="380" height="424" rx="15" fill="#142129" stroke="#2c5260" stroke-width="1.5"/>
+  <text x="104" y="381" class="zone-title">PUBLIC WEB SERVICE</text>
+  <rect x="110" y="406" width="324" height="84" rx="12" class="inner"/>
+  <rect x="127" y="426" width="40" height="42" rx="7" fill="#315f77"/><text x="147" y="452" text-anchor="middle" class="pill">N</text>
+  <text x="184" y="438" class="node-title">Next.js 16 · App Router</text>
+  <text x="184" y="460" class="node-sub">UI · server actions · API routes · Zod validation</text>
+  <rect x="110" y="516" width="324" height="83" rx="12" class="inner"/>
+  <text x="128" y="546" class="node-title">Investigation services</text>
+  <text x="128" y="568" class="node-sub">Discovery · browser control · Wayback · evidence pipeline</text>
+  <rect x="110" y="625" width="324" height="82" rx="12" class="inner"/>
+  <text x="128" y="654" class="node-title">Persistence &amp; object adapter</text>
+  <text x="128" y="676" class="node-sub">Drizzle ORM · Postgres rows · private artifact objects</text>
+  <rect x="110" y="729" width="324" height="27" rx="13" fill="#173a37" stroke="#286e68"/>
+  <text x="272" y="747" text-anchor="middle" class="pill" fill="#8bd6c8">NO USER FILES ON RENDER DISK</text>
+  <path d="M272 490V514" class="line"/><path d="M272 599V623" class="line"/>
+
+  <!-- model private service -->
+  <rect x="500" y="350" width="270" height="424" rx="15" fill="#1a1724" stroke="#7660b5" stroke-width="1.5"/>
+  <text x="522" y="381" class="zone-title" fill="#c4b6ef">PRIVATE MODEL SERVICE</text>
+  <rect x="530" y="416" width="210" height="85" rx="12" fill="#272136" stroke="#594b80"/>
+  <text x="635" y="448" text-anchor="middle" class="node-title">Auth gateway</text>
+  <text x="635" y="471" text-anchor="middle" class="node-sub">Bearer key · port 11435</text>
+  <path d="M635 501V526" class="purple"/>
+  <rect x="530" y="529" width="210" height="91" rx="12" fill="#272136" stroke="#594b80"/>
+  <text x="635" y="563" text-anchor="middle" class="node-title">Ollama · Gemma 3 4B</text>
+  <text x="635" y="586" text-anchor="middle" class="node-sub">raw API on container loopback</text>
+  <rect x="530" y="648" width="210" height="67" rx="12" fill="#272136" stroke="#594b80"/>
+  <text x="635" y="677" text-anchor="middle" class="node-title">5 GB model cache</text>
+  <text x="635" y="698" text-anchor="middle" class="node-sub">Render disk · model weights only</text>
+  <path d="M635 620V646" class="line"/>
+  <path d="M434 558H528" class="purple"/>
+  <text x="480" y="544" text-anchor="middle" class="tiny">private HTTP</text>
+  <text x="480" y="557" text-anchor="middle" class="tiny">POST /api/chat</text>
+  <text x="480" y="571" text-anchor="middle" class="tiny">bearer auth</text>
+
+  <!-- Managed and API providers -->
+  <rect x="835" y="285" width="723" height="568" rx="18" fill="#11191e" stroke="#52616a" stroke-width="1.5" stroke-dasharray="9 6"/>
+  <text x="859" y="316" class="zone-title">MANAGED DATA &amp; EXTERNAL SERVICES</text>
+  <rect x="876" y="350" width="288" height="130" rx="14" class="external"/>
+  <circle cx="910" cy="388" r="15" fill="#2875a0"/><path d="M902 390h16m-13-6v12m10-12v12" stroke="#d8efff" stroke-width="1.6"/>
+  <text x="938" y="386" class="node-title">Tiger Data</text>
+  <text x="900" y="421" class="node-sub">PostgreSQL · TLS</text>
+  <text x="900" y="443" class="node-sub">Cases · sources · observations · findings</text>
+  <text x="900" y="462" class="node-sub">Evidence graph · Browserbase session metadata</text>
+
+  <rect x="1200" y="350" width="316" height="130" rx="14" class="external"/>
+  <text x="1224" y="385" class="node-title">SerpApi</text><text x="1224" y="408" class="node-sub">Google search results · HTTPS</text>
+  <text x="1224" y="439" class="node-sub">Search results are leads only;</text><text x="1224" y="458" class="node-sub">they are not stored evidence until verified.</text>
+
+  <rect x="876" y="511" width="288" height="130" rx="14" class="external"/>
+  <text x="900" y="547" class="node-title">Browserbase</text><text x="900" y="570" class="node-sub">Temporary remote Chromium · Playwright</text>
+  <text x="900" y="601" class="node-sub">Server creates/releases sessions;</text><text x="900" y="620" class="node-sub">live view runs in the investigator browser.</text>
+
+  <rect x="1200" y="511" width="316" height="130" rx="14" class="external"/>
+  <text x="1224" y="547" class="node-title">Internet Archive</text><text x="1224" y="570" class="node-sub">Wayback availability + CDX captures · HTTPS</text>
+  <text x="1224" y="601" class="node-sub">Archived pages become source records</text><text x="1224" y="620" class="node-sub">only after validation and persistence.</text>
+
+  <rect x="876" y="672" width="288" height="130" rx="14" class="external"/>
+  <text x="900" y="708" class="node-title">DigitalOcean Spaces</text><text x="900" y="731" class="node-sub">Optional private S3-compatible storage</text>
+  <text x="900" y="762" class="node-sub">Explicit uploads only · metadata in Tiger</text><text x="900" y="781" class="node-sub">short-lived presigned download URLs</text>
+  <rect x="1200" y="672" width="316" height="130" rx="14" class="external"/>
+  <text x="1224" y="708" class="node-title">Sentry</text><text x="1224" y="731" class="node-sub">Client, server &amp; edge error monitoring</text>
+  <text x="1224" y="762" class="node-sub">Scrubbed events · no prompts, cookies,</text><text x="1224" y="781" class="node-sub">request bodies or database credentials</text>
+
+  <!-- Data flows -->
+  <path d="M451 207C520 270 250 284 250 348" class="teal"/>
+  <text x="349" y="283" class="tiny">HTTPS · pages and API</text>
+  <path d="M434 420H482V330H820" class="teal"/>
+  <text x="650" y="322" text-anchor="middle" class="tiny">server-side outbound · HTTPS / TLS</text>
+  <path d="M820 330V415H876" class="line"/>
+  <text x="882" y="497" class="tiny">TLS · SQL reads/writes</text>
+  <path d="M820 330H1182V415H1200" class="line"/>
+  <text x="1220" y="497" class="tiny">HTTPS · search API</text>
+  <path d="M820 330V576H876" class="line"/>
+  <text x="882" y="656" class="tiny">HTTPS · create/release session</text>
+  <path d="M820 330H1182V576H1200" class="line"/>
+  <text x="1220" y="656" class="tiny">HTTPS · capture lookup</text>
+  <path d="M820 330V736H876" class="line"/>
+  <text x="882" y="817" class="tiny">HTTPS · private objects + presigned URL</text>
+  <path d="M820 330H1182V736H1200" class="line dashed"/>
+  <text x="1220" y="817" class="tiny">scrubbed error / trace events</text>
+  <path d="M1164 576H1530V245H1465V226" class="purple dashed" marker-start="url(#arrowPurple)"/>
+  <text x="1522" y="470" text-anchor="end" class="tiny">short-lived view connection</text>
+  <path d="M451 235H1578V736H1516" class="line dashed"/>
+
+  <!-- Local-only mode -->
+  <rect x="42" y="911" width="1516" height="125" rx="16" fill="#14191d" stroke="#706451" stroke-width="1.3"/>
+  <text x="66" y="943" class="zone-title" fill="#dbc58d">LOCAL DEMO MODE · DEVELOPER MACHINE ONLY</text>
+  <rect x="84" y="963" width="320" height="49" rx="10" class="inner"/>
+  <text x="244" y="984" text-anchor="middle" class="node-title">Next.js dev server</text><text x="244" y="1001" text-anchor="middle" class="node-sub">same investigation code paths</text>
+  <path d="M405 987H520" class="line"/>
+  <rect x="523" y="963" width="344" height="49" rx="10" class="inner"/>
+  <text x="695" y="984" text-anchor="middle" class="node-title">Ollama · Gemma 3 4B</text><text x="695" y="1001" text-anchor="middle" class="node-sub">127.0.0.1:11434 · loopback only</text>
+  <path d="M244 1012V1022H1138" class="line dashed"/>
+  <rect x="1140" y="963" width="366" height="49" rx="10" class="inner"/>
+  <text x="1323" y="984" text-anchor="middle" class="node-title">Local artifact files</text><text x="1323" y="1001" text-anchor="middle" class="node-sub">.data/artifacts · development only</text>
+  <text x="1550" y="1059" text-anchor="end" class="tiny">Production does not rely on local filesystem persistence.</text>
+</svg>

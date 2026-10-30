@@ -18,23 +18,13 @@ The Render Blueprint runs the Next.js application and a private Ollama service w
 
 ## Architecture
 
-The Next.js app is the only interface. Server code talks to Tiger Data through Drizzle, to SerpApi for discovery, to Browserbase for a cloud browser, to the Internet Archive for Wayback captures, and to a loopback Ollama process for Gemma. Findings are written only after a Zod check, and a verified claim has to quote text that is already stored.
+![THE UNCLAIMED production architecture](docs/architecture.svg)
 
-Large files stay out of PostgreSQL. With DigitalOcean Spaces configured, an explicit upload stores the object privately and keeps metadata in the `artifacts` table. Otherwise the same path writes under `.data/artifacts`.
+The diagram separates the investigator's browser, Render services, and managed providers. The Next.js server owns secret-bearing API calls and uses Drizzle to store investigations, sources, observations, and findings in Tiger Data. Findings pass Zod validation, and verified claims must quote text already stored as evidence.
 
-Residual Presence and AudioManager do not call search, the browser, the archive, or the model. Audio files are generated ahead of time and served from `public/audio`. Sentry receives scrubbed errors and traces. It does not receive request bodies, database URLs, or model prompts.
+Production artifacts require private DigitalOcean Spaces storage; PostgreSQL holds their metadata. The deployed app never writes user files to Render's local disk. `.data/artifacts` is a local-development fallback only. Static ambient audio is served from `public/audio`, while Residual Presence and AudioManager run in the browser without calling the search, archive, browser, or model providers.
 
-```
-browser → Next.js routes
-            ├─ Drizzle → Tiger Data (investigations, sources, observations, findings, graph rows)
-            ├─ SerpApi discovery
-            ├─ Browserbase + Playwright extraction
-            ├─ Internet Archive Wayback
-            ├─ Ollama (Gemma 3 4B) on 127.0.0.1
-            ├─ optional DigitalOcean Spaces, or .data/artifacts
-            └─ Sentry (scrubbed)
-client only: evidence graph, timeline, Residual Presence, local audio
-```
+Inference always uses Gemma 3 4B. Local development connects to loopback Ollama; Render connects to a separate private model service through a bearer-authenticated gateway. The raw Ollama port is never public. Sentry receives scrubbed errors and traces without request bodies, database URLs, or model prompts. See [DEPLOYMENT.md](DEPLOYMENT.md) for the service configuration and [the architecture notes](docs/architecture.md) for data-flow and trust-boundary details.
 
 ## Technology stack
 
@@ -70,7 +60,7 @@ Copy `.env.example` to `.env.local`. Leave unused values empty. `.env.local` is 
 | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` | Audio script only. The voice id is required for the three whisper files. |
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT` | Error and trace reporting. |
 | `SENTRY_AUTH_TOKEN` | Source-map upload during a build. The running app does not need it. |
-| `SPACES_ENDPOINT`, `SPACES_BUCKET`, `SPACES_REGION`, `SPACES_ACCESS_KEY`, `SPACES_SECRET_KEY` | Optional. If any required value is missing, files stay in `.data/artifacts`. |
+| `SPACES_ENDPOINT`, `SPACES_BUCKET`, `SPACES_REGION`, `SPACES_ACCESS_KEY`, `SPACES_SECRET_KEY` | Optional for local development. Required in production when uploading or opening user artifacts; production never falls back to `.data/artifacts`. |
 | `SEARCH_*`, `CRAWL_*`, `ARCHIVE_*`, `OLLAMA_TIMEOUT_MS`, `PRESENCE_*`, `SPACES_URL_TTL_SECONDS` | Optional limits. Empty values use the defaults noted in `.env.example`. |
 
 Do not commit `.env.local`. The client bundle is not given the database URL, SerpApi key, Browserbase key, ElevenLabs key, Spaces keys, or Ollama settings.
