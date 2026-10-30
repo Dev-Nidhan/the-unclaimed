@@ -54,7 +54,7 @@ The existing defaults are suitable for a first deployment. Add these only when c
 ## Create the Render service
 
 1. Push the repository to a Git provider connected to Render.
-2. In Render, create a Blueprint from the repository and review `render.yaml`. It creates the Next.js Node service and the Ollama Docker private service. The app uses `npm ci && npm run build`, runs `npm run db:migrate` before each deploy, then starts with `npm run start`. The model service pulls `gemma3:4b` into its attached model-cache disk on first start.
+2. In Render, create a Blueprint from the repository and review `render.yaml`. It creates the Next.js Node service and the Ollama Docker private service. The app uses `npm ci --include=dev && npm run build` so build-time Tailwind/Turbopack and pre-deploy Drizzle migration tools are installed even with `NODE_ENV=production`; it runs `npm run db:migrate` before each deploy, then starts with `npm run start`. The model service pulls `gemma3:4b` into its attached model-cache disk on first start.
 3. Set the same Render region for both services; choose the region closest to Tiger Data when possible. Confirm the selected plans and live credit estimate in the Render dashboard.
 4. Supply the required secrets in Render. Add the Spaces variables if artifact storage is enabled. Keep preview environments disabled until separate non-production credentials and a separate database are ready.
 5. Confirm Tiger Data accepts connections from the deployed service and that its URL uses TLS. Confirm Browserbase and SerpApi credentials are valid.
@@ -80,7 +80,7 @@ The manager arms investigation audio only after the user's explicit audio click 
 
 ## Verification checklist
 
-- [ ] `npm ci` completes from the lockfile.
+- [ ] `npm ci --include=dev` completes from the lockfile in Render's production environment.
 - [ ] `npm run build` succeeds with the intended production environment.
 - [ ] Tiger Data URL is valid, TLS-enabled, and uses the correct production database.
 - [ ] Render has SerpApi, Browserbase, Sentry, and (if used) Spaces variables configured as secrets.

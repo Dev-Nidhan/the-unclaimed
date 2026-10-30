@@ -10,7 +10,7 @@ services:
     runtime: node
     region: oregon
     plan: 1c-2g
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci --include=dev && npm run build
     preDeployCommand: npm run db:migrate
     startCommand: npm run start
     healthCheckPath: /api/health
