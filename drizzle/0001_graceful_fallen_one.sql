@@ -1,0 +1,2 @@
+ALTER TABLE "sources" DROP CONSTRAINT "sources_access_status_known";--> statement-breakpoint
+ALTER TABLE "sources" ADD CONSTRAINT "sources_access_status_known" CHECK ("sources"."access_status" in ('unknown', 'reachable', 'accessible', 'unreachable', 'blocked', 'http_404', 'http_403', 'redirected', 'timeout', 'navigation_error'));

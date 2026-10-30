@@ -1,0 +1,45 @@
+{
+  "name": "the-unclaimed",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --import ./tests/register.mjs --test tests/setup.test.mjs tests/start-investigation.test.mts tests/discovery.test.mts tests/browser-url.test.mts tests/archaeology.test.mts tests/wayback.test.mts tests/ai-grounding.test.mts tests/evidence-graph.test.mts tests/presence.test.mts tests/audio-library.test.mts tests/audio-manager.test.mts tests/sentry-scrub.test.mts tests/storage.test.mts tests/investigation.integration.test.mts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "audio:list": "node --experimental-strip-types --import ./tests/register.mjs scripts/generate-audio.mts --list",
+    "audio:generate": "node --experimental-strip-types --import ./tests/register.mjs --env-file=.env.local scripts/generate-audio.mts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1160.0",
+    "@aws-sdk/s3-request-presigner": "^3.1160.0",
+    "@browserbasehq/sdk": "^2.24.0",
+    "@browserbasehq/stagehand": "^4.3.0",
+    "@sentry/nextjs": "^11.10.0",
+    "@xyflow/react": "^12.12.0",
+    "drizzle-orm": "^0.45.4",
+    "lucide-react": "^1.65.0",
+    "next": "16.4.3",
+    "playwright-core": "^1.64.1",
+    "postgres": "^4.0.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

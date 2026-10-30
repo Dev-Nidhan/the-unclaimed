@@ -1,0 +1,61 @@
+envVarGroups:
+  - name: the-unclaimed-ollama-auth
+    envVars:
+      - key: OLLAMA_API_KEY
+        generateValue: true
+
+services:
+  - type: web
+    name: the-unclaimed
+    runtime: node
+    region: oregon
+    plan: 1c-2g
+    buildCommand: npm ci && npm run build
+    preDeployCommand: npm run db:migrate
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 120
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SERPAPI_API_KEY
+        sync: false
+      - key: BROWSERBASE_API_KEY
+        sync: false
+      - key: BROWSERBASE_PROJECT_ID
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        sync: false
+      - key: OLLAMA_MODEL
+        value: gemma3:4b
+      - key: OLLAMA_TIMEOUT_MS
+        value: "300000"
+      - key: OLLAMA_INTERNAL_HOST
+        fromService:
+          type: pserv
+          name: the-unclaimed-ollama
+          property: host
+      - key: OLLAMA_INTERNAL_PORT
+        value: "11435"
+      - fromGroup: the-unclaimed-ollama-auth
+
+  - type: pserv
+    name: the-unclaimed-ollama
+    runtime: docker
+    region: oregon
+    plan: 2c-8g
+    dockerfilePath: ./ollama/Dockerfile
+    dockerContext: ./ollama
+    maxShutdownDelaySeconds: 120
+    disk:
+      name: the-unclaimed-model-cache
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - key: OLLAMA_MODEL
+        value: gemma3:4b
+      - fromGroup: the-unclaimed-ollama-auth
